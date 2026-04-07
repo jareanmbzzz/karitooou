@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>150 Razones</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">150 Razones</h1>
+            <p class="hero-subtitle">Por las cuales te amo, mi Karito hermosa</p>
+            <button class="cta-button" onclick="startJourney()">Click aqui amorcito</button>
+        </div>
+
+        <div class="floating-hearts">
+            <div class="heart">❤️</div>
+            <div class="heart">💖</div>
+            <div class="heart">💕</div>
+            <div class="heart">💗</div>
+            <div class="heart">💝</div>
+        </div>
+    </div>
+
+    <div class="container" id="reasonsContainer">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+            <span class="progress-text" id="progressText">0 / 150</span>
+        </div>
+
+        <div class="reasons-grid" id="reasonsGrid">
+            <!-- Las razones se insertan con JavaScript -->
+        </div>
+
+        <button class="load-more" id="loadMoreBtn" onclick="loadMoreReasons()">
+    <span>Ver más razones</span>
+    <div class="loader" id="loader"></div>
+</button>
+
+<a href="carta.html" class="load-more" id="letterBtn" style="display: none;">
+    <span>Ir a la carta 💌</span>
+</a>
+
+    <div class="footer">
+        <p>Por siempre tuyo, hecho con todo mi corazon ❤️</p>
+    </div>
+
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
