@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinnamoroll tu fav amor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cinnamoroll-blue: #70cafb;
+            --cinnamoroll-light-blue: #c1e6fa;
+            --cinnamoroll-pink: #ffb6c1;
+            --cinnamoroll-white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--cinnamoroll-light-blue);
+            color: #4a4a4a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .page.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .cloud {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 30s infinite linear;
+        }
+        
+        .cloud:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 45s;
+        }
+        
+        .cloud:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 65%;
+            animation-duration: 37s;
+            animation-delay: 5s;
+        }
+        
+        .cloud:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            left: 30%;
+            animation-duration: 40s;
+            animation-delay: 10s;
+        }
+        
+        .cloud:nth-child(4) {
+            width: 120px;
+            height: 120px;
+            top: 75%;
+            left: 80%;
+            animation-duration: 50s;
+            animation-delay: 3s;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateX(-100px);
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px));
+            }
+        }
+        
+        .letter-container {
+            width: 90%;
+            max-width: 500px;
+            perspective: 1000px;
+            margin: 20px;
+        }
+        
+        .letter {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+            cursor: pointer;
+        }
+        
+        .letter.opened {
+            transform: rotateY(180deg);
+        }
+        
+        .letter-front, .letter-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .letter-front {
+            background-color: var(--cinnamoroll-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .letter-back {
+            background-color: var(--cinnamoroll-white);
+            transform: rotateY(180deg);
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: left;
+            background-image: radial-gradient(circle, var(--cinnamoroll-light-blue) 10%, transparent 10%);
+            background-size: 20px 20px;
+            overflow-y: auto;
+            max-height: 100%;
+        }
+        
+        .cinnamoroll-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .letter-front h2 {
+            color: white;
+            margin: 10px 0;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+        }
+        
+        .tap-text {
+            color: white;
+            opacity: 0.8;
+            font-size: 14px;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .letter-back h3 {
+            color: var(--cinnamoroll-blue);
+            margin-bottom: 15px;
+            font-size: 22px;
+            align-self: flex-start;
+            padding-left: 5px;
+        }
+        
+        .letter-back p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            font-size: 12px;
+            padding: 0 5px;
+            text-align: justify;
+        }
+        
+        .heart {
+            position: absolute;
+            background-color: var(--cinnamoroll-pink);
+            display: inline-block;
+            height: 15px;
+            width: 15px;
+            transform: rotate(-45deg);
+            animation: float-heart 4s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        .heart:before, .heart:after {
+            content: "";
+            background-color: var(--cinnamoroll-pink);
+            border-radius: 50%;
+            position: absolute;
+            width: 15px;
+            height: 15px;
+        }
+        
+        .heart:before {
+            top: -7.5px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: 7.5px;
+        }
+        
+        @keyframes float-heart {
+            0%, 100% {
+                transform: translate(0, 0) rotate(-45deg);
+            }
+            50% {
+                transform: translate(0, -10px) rotate(-45deg);
+            }
+        }
+        
+        #heart1 {
+            bottom: 50px;
+            right: 40px;
+        }
+        
+        #heart2 {
+            bottom: 80px;
+            right: 80px;
+            animation-delay: 1s;
+        }
+        
+        #heart3 {
+            bottom: 40px;
+            right: 120px;
+            animation-delay: 2s;
+        }
+        
+        .btn {
+            background-color: var(--cinnamoroll-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            align-self: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Page 1 - Question Page */
+        .question-page {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .question-page h1 {
+            color: var(--cinnamoroll-blue);
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-page .cinnamoroll-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .choice-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .choice-btn {
+            background-color: var(--cinnamoroll-blue);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .choice-btn.no {
+            background-color: #ff8a9b;
+        }
+
+        /* Page 2 - Happy Cinnamoroll Page */
+        .happy-page {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .happy-page h2 {
+            color: var(--cinnamoroll-blue);
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .happy-cinnamoroll {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Page 4 - Thank You Page */
+        .thankyou-page {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .thankyou-page h2 {
+            color: var(--cinnamoroll-blue);
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .thankyou-page p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .restart-btn {
+            background-color: var(--cinnamoroll-pink);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="clouds">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
+    
+    <!-- Page 1: Question -->
+    <div class="page active" id="page1">
+        <div class="question-page">
+            <img class="cinnamoroll-image" src="https://public.youware.com/users-website-assets/prod/a3bdd308-2337-47de-94db-e8d54116c68f/ff4d9251aef24b6189ea2d73a7a8286c.png" alt="Cinnamoroll">
+            <h1>you querer read this cartita?</h1>
+            <div class="choice-buttons">
+                <button class="choice-btn" id="yes-btn">Si</button>
+                <button class="choice-btn no" id="no-btn">Ño</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Happy Cinnamoroll -->
+    <div class="page" id="page2">
+        <div class="happy-page">
+            <img class="happy-cinnamoroll" src="https://public.youware.com/users-website-assets/prod/a3bdd308-2337-47de-94db-e8d54116c68f/ff4d9251aef24b6189ea2d73a7a8286c.png" alt="Happy Cinnamoroll">
+            <h2>SUPER EXCELENTEEEE 🎉</h2>
+            <p>He preparado esto con mucho amor para ti cariño</p>
+            <button class="choice-btn" id="open-btn">Abrir</button>
+        </div>
+    </div>
+
+    <!-- Page 3: Letter -->
+    <div class="page" id="page3">
+        <div class="letter-container">
+            <div class="letter opened">
+                <div class="letter-back">
+                    <h3>Hola amoshito karitooo,</h3>
+                    <p>Feliz 1 mesecito a tu lado mi niña hermosa, no sabes lo muy feliz que me haces y lo muy lindo que me parecio este mes a tu lado, tantas cosas, tantos sentimientos, tantos encuentros, tantos momentos que quedaran grabados en mi mente toda la vida en mi corazon y alma, estoy muy agradecido con Dios, con la vida, con el destino, que nos hayan juntado en esto, que el amor que tanto nos tenemos siga creciendo y creciendo, como te volviste la persona mas importante en mi vida apenas conociéndote poco?</p>
+                    
+                    <p>pues aquí es y se ve de que para el amor quizás uno diga que necesiten tiempo para conocerse pero yo desde los primeros días que me demostraste algo genuino, algo super lindo y diferente, me cautive en ese momento, me fui enamorando poco a poco mas de ti y ahí fue cuando me enamore completamente, y no fue físicamente, fue de amor verdadero, me enamore de tu risita, de tu voz tan suave y tierna, de tus chistes, de tu forma de expresarte, de tu carita, tus cachetitos que a cada rato te digo mi cachetoncita, tus labios tan icos jeje, tu sonrisa tan brillante, tu, lo que eres tu, todo de ti es lo que te forma y es la persona mas increíble y amorosa de este mundo</p>
+                    
+                    <p>no sabes el amor intenso que te tengo y que esta carta y las otras mas que te ire haciendo con el tiempo se quedan corto para el amor inmenso que quiero describir por ti, primeramente Dios vamos por mas y quiero seguir a tu ladito cuando no pueda seguir caminando, cuando mis sueños los cumplas y estes ahí para celebrarlos, cuando ya tenga mi futuro que sea contigo, porque contigo es con quien quiero estar siempre, a tu lado es con quien quiero pasar toda mi vida, quiero casarme contigo, quiero viajar contigo, quiero tener hijos contigo, quiero envejecer contigo, quiero morir contigo, que no quisiera hacer contigo, porque en cada lugar a donde sea que vaya quisiera que estuvieras aquí o que hagamos esto juntos</p>
+                    
+                    <p>porque cada vez que tu estas conmigo todo es tan bello, se vuelve un recuerdo tan hermoso y es lo que me hace enamorarme tanto de ti, de la mujer tan preciosa que tengo ahora a mi lado y bueno, espero esto te sea de recordatorio de que yo prometo con todo de que estaré aquí siempre a tu lado</p>
+                    
+                    <p>solo nunca me dejes solo porque contigo es con quien quiero hacer mi vida ahora en adelante, gracias a ti vivo, me siento vivo, te amo con cada pedazito de mi alma, te amo con cada latido de mi corazon, no estas en mi corazon porque tu eres mi corazon, te amo de aquí hasta la luna a pasitos de tortuga de regreso e ida, te amo con todos los colores en su inmensa intensidad, te amo como todas las estrellas en su noche, te amo como la luna da su mejor brillo, te amo como el solecito tan radiante que deslumbra y hace de mis mañanas las mejores</p>
+                    
+                    <p>te amo desde lo mas profundo de mi, te amo mas cada segundo, te amo cada dia mucho mas, y cada día es el cual deseo que siempre estes junto a mi, te amo tanto mi karito preciosa, eres y siempre seras la mejor personita en mi vida</p>
+                    
+                    <p>te amo muchísimo mi niña preciosa, mi princesita, eres todo para mi y nunca quiero perderte, te amo demasiado hoy mañana y siempre y que Dios nos cuide en esta relación y futuro que nos tiene, gracias por todo siempre cariño mio, te amoo!! ❤️</p>
+                    
+                    <button class="btn" id="finish-btn">Lito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 4: Thank You -->
+    <div class="page" id="page4">
+        <div class="thankyou-page">
+            <h2>Gracias por leer amoshitoooo 💙</h2>
+            <p>Te amo muchisimo nunca lo olvides!!</p>
+            <img class="cinnamoroll-image" src="https://public.youware.com/users-website-assets/prod/a3bdd308-2337-47de-94db-e8d54116c68f/ff4d9251aef24b6189ea2d73a7a8286c.png" alt="Cinnamoroll">
+            <br><br>
+            <button class="restart-btn" id="restart-btn">Leer de nuevo</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const pages = document.querySelectorAll('.page');
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            const openBtn = document.getElementById('open-btn');
+            const finishBtn = document.getElementById('finish-btn');
+            const restartBtn = document.getElementById('restart-btn');
+
+            function showPage(pageNumber) {
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(`page${pageNumber}`).classList.add('active');
+            }
+
+            yesBtn.addEventListener('click', function() {
+                showPage(2);
+            });
+
+            noBtn.addEventListener('click', function() {
+                alert('Di que si okei!');
+            });
+
+            openBtn.addEventListener('click', function() {
+                showPage(3);
+            });
+
+            finishBtn.addEventListener('click', function() {
+                showPage(4);
+            });
+
+            restartBtn.addEventListener('click', function() {
+                showPage(1);
+            });
+        });
+    </script>
+</body>
+</html>
